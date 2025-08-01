@@ -7,21 +7,18 @@ import {
   LatestInvoiceRaw,
   Revenue,
 } from './definitions';
-import { formatCurrency } from './utils';
+import { formatCurrency, getRandomNumber } from './utils';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
 export async function fetchRevenue() {
   try {
-    // Artificially delay a response for demo purposes.
-    // Don't do this in production :)
-
-    // console.log('Fetching revenue data...');
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
+    var delay = getRandomNumber(500, 1500);
+    await new Promise((resolve) => setTimeout(resolve, delay));
 
     const data = await sql<Revenue[]>`SELECT * FROM revenue`;
 
-    // console.log('Data fetch completed after 3 seconds.');
+    console.log(`fetchRevenue() completed after ${delay} milliseconds.`, delay);
 
     return data;
   } catch (error) {
@@ -32,12 +29,17 @@ export async function fetchRevenue() {
 
 export async function fetchLatestInvoices() {
   try {
+    var delay = getRandomNumber(500, 1500);
+    await new Promise((resolve) => setTimeout(resolve, delay));
+
     const data = await sql<LatestInvoiceRaw[]>`
       SELECT invoices.amount, customers.name, customers.image_url, customers.email, invoices.id
       FROM invoices
       JOIN customers ON invoices.customer_id = customers.id
       ORDER BY invoices.date DESC
       LIMIT 5`;
+
+    console.log(`fetchLatestInvoices() completed after ${delay} milliseconds.`, delay);
 
     const latestInvoices = data.map((invoice) => ({
       ...invoice,
@@ -52,6 +54,8 @@ export async function fetchLatestInvoices() {
 
 export async function fetchCardData() {
   try {
+    var delay = getRandomNumber(500, 1500);
+    await new Promise((resolve) => setTimeout(resolve, delay));
     // You can probably combine these into a single SQL query
     // However, we are intentionally splitting them to demonstrate
     // how to initialize multiple queries in parallel with JS.
@@ -67,6 +71,8 @@ export async function fetchCardData() {
       customerCountPromise,
       invoiceStatusPromise,
     ]);
+
+    console.log(`fetchCardData() completed after ${delay} milliseconds.`, delay);
 
     const numberOfInvoices = Number(data[0][0].count ?? '0');
     const numberOfCustomers = Number(data[1][0].count ?? '0');
