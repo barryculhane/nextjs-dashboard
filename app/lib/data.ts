@@ -10,10 +10,12 @@ import {
 import { formatCurrency, getRandomNumber } from './utils';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+const delayMin = 0; //500;
+const delayMax = 0; //1500;
 
 export async function fetchRevenue() {
   try {
-    var delay = getRandomNumber(500, 1500);
+    var delay = getRandomNumber(delayMin, delayMax);
     await new Promise((resolve) => setTimeout(resolve, delay));
 
     const data = await sql<Revenue[]>`SELECT * FROM revenue`;
@@ -29,7 +31,7 @@ export async function fetchRevenue() {
 
 export async function fetchLatestInvoices() {
   try {
-    var delay = getRandomNumber(500, 1500);
+    var delay = getRandomNumber(delayMin, delayMax);
     await new Promise((resolve) => setTimeout(resolve, delay));
 
     const data = await sql<LatestInvoiceRaw[]>`
@@ -54,7 +56,7 @@ export async function fetchLatestInvoices() {
 
 export async function fetchCardData() {
   try {
-    var delay = getRandomNumber(500, 1500);
+    var delay = getRandomNumber(delayMin, delayMax);
     await new Promise((resolve) => setTimeout(resolve, delay));
     // You can probably combine these into a single SQL query
     // However, we are intentionally splitting them to demonstrate
