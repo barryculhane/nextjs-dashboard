@@ -10,8 +10,8 @@ import {
 import { formatCurrency, getRandomNumber } from './utils';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
-const delayMin = 0; //500;
-const delayMax = 0; //1500;
+const delayMin = 500;
+const delayMax = 1500;
 
 export async function fetchRevenue() {
   try {
