@@ -7,21 +7,18 @@ import {
   LatestInvoiceRaw,
   Revenue,
 } from './definitions';
-import { formatCurrency } from './utils';
+import { formatCurrency, getRandomNumber } from './utils';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+const delayMin = 50;
+const delayMax = 500;
 
 export async function fetchRevenue() {
   try {
-    // Artificially delay a response for demo purposes.
-    // Don't do this in production :)
-
-    // console.log('Fetching revenue data...');
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
+    const delay = getRandomNumber(delayMin, delayMax);
+    await new Promise((resolve) => setTimeout(resolve, delay));
 
     const data = await sql<Revenue[]>`SELECT * FROM revenue`;
-
-    // console.log('Data fetch completed after 3 seconds.');
 
     return data;
   } catch (error) {
@@ -31,6 +28,9 @@ export async function fetchRevenue() {
 }
 
 export async function fetchLatestInvoices() {
+  const delay = getRandomNumber(delayMin, delayMax);
+  await new Promise((resolve) => setTimeout(resolve, delay));
+
   try {
     const data = await sql<LatestInvoiceRaw[]>`
       SELECT invoices.amount, customers.name, customers.image_url, customers.email, invoices.id
@@ -51,6 +51,9 @@ export async function fetchLatestInvoices() {
 }
 
 export async function fetchCardData() {
+  const delay = getRandomNumber(delayMin, delayMax);
+  await new Promise((resolve) => setTimeout(resolve, delay));
+
   try {
     // You can probably combine these into a single SQL query
     // However, we are intentionally splitting them to demonstrate
@@ -90,6 +93,9 @@ export async function fetchFilteredInvoices(
   query: string,
   currentPage: number,
 ) {
+  const delay = getRandomNumber(delayMin, delayMax);
+  await new Promise((resolve) => setTimeout(resolve, delay));
+
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
   try {
@@ -168,6 +174,9 @@ export async function fetchInvoiceById(id: string) {
 }
 
 export async function fetchCustomers() {
+  const delay = getRandomNumber(delayMin, delayMax);
+  await new Promise((resolve) => setTimeout(resolve, delay));
+
   try {
     const customers = await sql<CustomerField[]>`
       SELECT
@@ -185,6 +194,9 @@ export async function fetchCustomers() {
 }
 
 export async function fetchFilteredCustomers(query: string) {
+  const delay = getRandomNumber(delayMin, delayMax);
+  await new Promise((resolve) => setTimeout(resolve, delay));
+
   try {
     const data = await sql<CustomersTableType[]>`
 		SELECT
